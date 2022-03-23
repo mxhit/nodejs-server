@@ -1,6 +1,24 @@
-import { createServer } from 'http';
+const http = require('http');
+const fs = require('fs');
 
-createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end('<iframe src="https://giphy.com/embed/Nx0rz3jtxtEre" width="480" height="240" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>');
-}).listen(8080);
+const port = 8080;
+
+const server = http.createServer((req, res) => {
+    fs.readFile('./public/index.html', (err, data) => {
+        if (err) {
+            res.writeHead(404);
+            res.end('Error: File Not Found');
+        } else {
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(data);
+        }
+    });
+});
+
+server.listen(port, (err) => {
+    if (err) {
+        console.error('Something went wrong');
+    } else {
+        console.log(`Listening on port ${port}`);
+    }
+});
